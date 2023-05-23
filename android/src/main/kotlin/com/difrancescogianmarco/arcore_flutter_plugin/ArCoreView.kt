@@ -17,6 +17,8 @@ import com.difrancescogianmarco.arcore_flutter_plugin.flutter_models.FlutterArCo
 import com.difrancescogianmarco.arcore_flutter_plugin.models.RotatingNode
 import com.difrancescogianmarco.arcore_flutter_plugin.utils.ArCoreUtils
 import com.difrancescogianmarco.arcore_flutter_plugin.utils.DecodableUtils.Companion.parseVector3
+import com.difrancescogianmarco.arcore_flutter_plugin.utils.DecodableUtils.Companion.parseQuaternion
+
 import com.google.ar.core.*
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.google.ar.core.exceptions.UnavailableException
@@ -494,14 +496,9 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
 
     fun updateRotation(call: MethodCall, result: MethodChannel.Result) {
         val name = call.argument<String>("name")
-        val node = arSceneView?.scene?.findByName(name) as RotatingNode
+        val node = arSceneView?.scene?.findByName(name) as Node
         debugLog("rotating node:  $node")
-        val degreesPerSecond = call.argument<Double?>("degreesPerSecond")
-        debugLog("rotating value:  $degreesPerSecond")
-        if (degreesPerSecond != null) {
-            debugLog("rotating value:  ${node.degreesPerSecond}")
-            node.degreesPerSecond = degreesPerSecond.toFloat()
-        }
+        node.localRotation = parseQuaternion(call.arguments as HashMap<String, Double>)
         result.success(null)
     }
 
