@@ -496,7 +496,7 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
 
     fun updateRotation(call: MethodCall, result: MethodChannel.Result) {
         val name = call.argument<String>("name")
-        val node = arSceneView?.scene?.findByName(name) as Node
+        val node = arSceneView?.scene?.findByName(name)
         debugLog("rotating node:  $node")
         node.localRotation = parseQuaternion(call.arguments as HashMap<String, Double>)
         result.success(null)
